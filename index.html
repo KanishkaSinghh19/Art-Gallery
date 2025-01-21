@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Artwork Details</title>
+  <title>My Artfolio</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -11,63 +11,111 @@
       padding: 0;
       background-color: #E8F0F2;
       color: #333;
-      text-align: center;
     }
     header {
       background-color: #4C956C;
       color: #F4F4F2;
+      text-align: center;
       padding: 30px 0;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     header h1 {
+      font-size: 2.5rem;
       margin: 0;
-      font-size: 2rem;
     }
-    main {
-      padding: 20px;
-    }
-    img {
-      max-width: 90%;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-    p {
+    header p {
       font-size: 1.2rem;
-      margin: 20px 0;
+      margin: 5px 0 0;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      align-items: center;
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border: 4px solid #A8DADC;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease-in-out;
+      cursor: pointer;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(168, 218, 220, 0.5);
+    }
+    footer {
+      text-align: center;
+      background-color: #F28482;
+      color: #F4F4F2;
+      padding: 15px 0;
+      font-size: 1.1rem;
+    }
+    footer p {
+      margin: 0;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Artwork Details</h1>
+    <h1>My Artfolio</h1>
+    <p>A calm and crafted space for my artworks</p>
   </header>
-  <main id="content">
-    <p>Loading...</p>
-  </main>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
 
-    if (!id) {
-      document.getElementById('content').innerHTML = '<p>Error: Missing artwork ID!</p>';
-    } else {
-      fetch(`http://localhost:8080/artwork?id=${id}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.error) {
-            document.getElementById('content').innerHTML = `<p>Error: ${data.error}</p>`;
-          } else {
-            document.getElementById('content').innerHTML = `
-              <h2>${data.title}</h2>
-              <img src="${data.url}" alt="${data.title}" />
-              <p>${data.description}</p>
-            `;
-          }
-        })
-        .catch(error => {
-          document.getElementById('content').innerHTML = `<p>Error fetching data: ${error}</p>`;
-        });
-    }
+  <section class="gallery" id="gallery">
+    <!-- Artworks dynamically loaded -->
+  </section>
+
+  <footer>
+    <p>&copy; 2025 KANISHKA - My Artfolio</p>
+  </footer>
+
+  <script>
+    const galleryDiv = document.getElementById("gallery");
+
+    // Image data with descriptions and URLs for details
+    const images = [
+      {
+        id: 1,
+        url: "https://assets.onecompiler.app/436feacxm/436kqdvjk/Screenshot%202025-01-18%20114105.png",
+        title: "Artwork 1",
+        description: "A serene landscape painting with vibrant tones of green and blue."
+      },
+      {
+        id: 2,
+        url: "https://assets.onecompiler.app/436feacxm/436kqdvjk/Screenshot%202025-01-18%20114212.png",
+        title: "Artwork 2",
+        description: "An abstract design using soft shades and dynamic curves."
+      },
+      {
+        id: 3,
+        url: "https://assets.onecompiler.app/436feacxm/436kqdvjk/Screenshot%202025-01-18%20114307.png",
+        title: "Artwork 3",
+        description: "A bold and colorful piece inspired by modern geometric art."
+      }
+    ];
+
+    // Dynamically append images to the gallery
+    images.forEach(image => {
+      const imgContainer = document.createElement("div");
+
+      // Create the clickable image
+      const img = document.createElement("img");
+      img.src = image.url;
+      img.alt = image.title;
+
+      // Add click functionality to redirect to details page
+      img.addEventListener("click", () => {
+        window.location.href = `/artwork-details.html?id=${image.id}`;
+      });
+
+      // Append the image to the gallery
+      imgContainer.appendChild(img);
+      galleryDiv.appendChild(imgContainer);
+    });
   </script>
 </body>
 </html>
